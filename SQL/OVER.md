@@ -1,6 +1,6 @@
 # **OVER CLAUSE**
 
-The `OVER ()` clause It allows you to specify the set of rows within a query that the aggregate function should operate on, rather than operating on the entire result set.
+The `OVER ()` clause allows you to specify the set of rows within a query that the aggregate function should operate on, rather than operating on the entire result set.
 
 In this example, the `OVER ()` clause is not making use of the `PARTITION BY`. This means that the entire dataset from the query is one and only partition.
 
@@ -46,6 +46,8 @@ PG-13 | 6 | 0.30
 NC-17 | 3 | 0.15
 G | 2 | 0.10
 PG | 2 | 0.10
+
+You can also use other window functions like SUM(), AVG(), COUNT(), MIN(), MAX() and many more with OVER() statement.
 
 [^note]: Taken from Data Wit Danny's [Serious SQL Course](https://www.datawithdanny.com/)
 
