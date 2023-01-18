@@ -21,6 +21,8 @@ Consider this sample[^note].
 
 The goal is to find out how many times each rating appears and its respective percentage. To get the denominator to calculate the percentage we apply the `OVER ()` clause and have the entire table as one partition.
 
+**This process is valid to find the frequency and the percentage for a single column**.
+
 ```sql
 SELECT
   rating,
