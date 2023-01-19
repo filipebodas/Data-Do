@@ -58,4 +58,63 @@ ORDER BY
   frequency DESC
 ```
 
+**What percentage of records are duplicates in the health.user_logs table?**
+
+```sql
+WITH logs_counts AS (
+  SELECT
+    id,
+    measure,
+    measure_value,
+    log_date,
+    diastolic,
+    systolic,
+    COUNT (*) AS frequency
+  FROM
+    health.user_logs
+  GROUP BY
+    id,
+    measure,
+    measure_value,
+    log_date,
+    diastolic,
+    systolic
+  )
+SELECT 
+  SUM (CASE
+    WHEN frequency > 1 THEN frequency - 1 -- this counts which ones are in fact duplicates
+    ELSE 0 -- it is a unique log
+      END) AS number_of_duplicates,
+  SUM (frequency) as total_logs,
+  ROUND (
+    100 * SUM (CASE
+            WHEN frequency > 1 THEN frequency - 1 
+            ELSE 0 
+              END)::NUMERIC /
+          SUM (frequency),
+    2
+  ) AS duplicates_percentage
+FROM 
+  logs_counts;
+```
+
+**OR**
+
+```sql
+WITH deduped_logs AS (
+  SELECT DISTINCT *
+  FROM health.user_logs
+)
+SELECT
+  ROUND(
+    100 * (
+      (SELECT COUNT(*) FROM health.user_logs) -
+      (SELECT COUNT(*) FROM deduped_logs)
+    )::NUMERIC /
+    (SELECT COUNT(*) FROM health.user_logs),
+    2
+  ) AS duplicate_percentage;
+```
+
+
 [^note]: Taken from Data Wit Danny's [Serious SQL Course](https://www.datawithdanny.com/)
